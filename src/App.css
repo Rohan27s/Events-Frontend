@@ -459,7 +459,20 @@ label {
 .uploaded_files ul {
   padding: 0;
 }
-
+.input-error{
+  color: red;
+  padding: 5px 0;
+}
+.file_bar{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.delete-file-btn{
+  border: none;
+  cursor:pointer;
+  background: transparent;
+}
 @media only screen and (max-width: 1024px) {
   .main {
     width: 95%;

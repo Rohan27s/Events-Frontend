@@ -34,10 +34,10 @@ const ReminderPicker = (props: { onReminderChange: (selectedReminder: string) =>
   }, []);
 
   const reminderOptions = [
-    { value: '-30', label: '30 min before the event' },
-    { value: '60', label: '1 hour before the event' },
-    { value: '1440', label: '1 day before the event' },
-    { value: '2880', label: '2 days before the event' },
+    { value: '30 min before the event', label: '30 min before the event' },
+    { value: '1 hour before the event', label: '1 hour before the event' },
+    { value: '1 day before the event', label: '1 day before the event' },
+    { value: '2 days before the event', label: '2 days before the event' },
   ];
 
   return (

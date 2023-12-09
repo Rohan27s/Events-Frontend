@@ -60,6 +60,11 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
     }));
   };
   const handleAddGuest = () => {
+    if (!validateEmail(newGuestEmail)) {
+      setEmailError('* Invalid email format');
+      return;
+    }
+    setEmailError(null)
     setFormData((prevData) => {
       const newGuest: Guest = { Name: '', email: newGuestEmail, AvatarUrl: '' };
       const updatedGuests = [...prevData.Guests, newGuest];
@@ -71,6 +76,19 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
 
     // Clear the typed email after adding the guest
     setNewGuestEmail('');
+  };
+  const handleDeleteFile = (file: File) => {
+    setFormData((prevData) => {
+      const updatedAttachments = [...prevData.Attachments];
+      const updatedFiles = updatedAttachments[0].file.filter((f) => f !== file);
+      
+      updatedAttachments[0].file = updatedFiles;
+
+      return {
+        ...prevData,
+        Attachments: updatedAttachments,
+      };
+    });
   };
 
 
@@ -148,7 +166,15 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
   const handleOpenDescriptionPopup = () => {
     setDescriptionPopupOpen(true);
   };
+  const [emailError, setEmailError] = useState<string | null>(null);
 
+
+
+  const validateEmail = (email: string): boolean => {
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
   const handleCloseDescriptionPopup = () => {
     setDescriptionPopupOpen(false);
   };
@@ -281,7 +307,7 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
                 Add Guests
               </label>
               <input
-                type="text"
+                type="email"
                 placeholder='contact@example.com'
                 value={newGuestEmail}
                 onChange={(e) => handleGuestEmailChange(e)}
@@ -290,6 +316,8 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
                 Add
               </button>
             </span>
+            <span className="input-error">{emailError}</span>
+
             <div className='guest_list'>
 
               {formData?.Guests.map((guest, index) => (
@@ -338,19 +366,31 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
               </div>
               <hr />
               <div className="uploaded_files">
-                {formData.Attachments[0].file.length > 0 ? (
-                  <ul>
-                    {formData.Attachments[0].file.map((file, idx) => (
-                      <li key={idx}>
-                        <span>✔️ {file.name} </span>
-                        <p className='tag'>{formatFileSize(file.size)}</p>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>No Uploaded files</p>
-                )}
-              </div>
+              {formData.Attachments[0].file.length > 0 ? (
+            <ul>
+              {formData.Attachments[0].file.map((file, idx) => (
+                <div className='file_bar'>
+                <li key={idx}>
+                  <span>
+                   ✔️
+                    {file.name}
+                  </span>
+                  <p className='tag'>{formatFileSize(file.size)}</p>
+                </li>
+                 <button
+                 type="button"
+                 className="delete-file-btn"
+                 onClick={() => handleDeleteFile(file)}
+               >
+                 ❌
+               </button>
+               </div>
+              ))}
+            </ul>
+          ) : (
+            <p>No Uploaded files</p>
+          )}
+        </div>
 
 
             </div>
