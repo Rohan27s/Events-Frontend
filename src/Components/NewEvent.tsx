@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {  useRef, useState } from 'react';
 import DurationPicker from './utils/DurationPicker';
 import ReminderPicker from './utils/ReminderPicker';
 import Popup from './utils/Popup';
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
@@ -74,7 +74,6 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
       };
     });
 
-    // Clear the typed email after adding the guest
     setNewGuestEmail('');
   };
   const handleDeleteFile = (file: File) => {
@@ -120,7 +119,20 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true)
+    if (!formData.EventName || !formData.Date || !formData.Time || !formData.Duration|| !formData.Description|| !formData.Location) {
+      toast.error('Please fill out all required fields.', {
+        position: 'top-center',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      return;
+    }
+  
+    setLoading(true);
+  
     try {
       const response = await axios.post('https://backend-rohan27s.vercel.app/api/auth/addnew', formData);
       console.log('Event posted successfully:', response.data);
@@ -146,6 +158,7 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
       });
     }
   };
+  
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSelectFilesClick = () => {
@@ -171,7 +184,6 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
 
 
   const validateEmail = (email: string): boolean => {
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
@@ -203,7 +215,6 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
       let endHour = startHour + durationHours;
       let endMinute = startMinute + durationMinutes;
 
-      // Adjust for overflow
       if (endMinute >= 60) {
         endHour += Math.floor(endMinute / 60);
         endMinute %= 60;
@@ -218,9 +229,6 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
   const padZero = (num: number): string => (num < 10 ? `0${num}` : `${num}`);
 
   const handleSaveDescription = () => {
-    // Add logic to save description here
-
-    // Close the popup after saving
     handleCloseDescriptionPopup();
   };
   const formatFileSize = (sizeInBytes: number): string => {
@@ -240,7 +248,7 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
         <form onSubmit={handleSubmit}>
           <span className="input-with-button">
             <label>
-              Event Name
+              Event Name*
             </label>
             <input
               type="text"
@@ -249,13 +257,13 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
               onChange={(e) => handleInputChange('EventName', e.target.value)}
             />
             <button type="button" onClick={handleOpenDescriptionPopup}>
-              Add Description
+              Add Description*
             </button>
           </span>
           <div className='single_row_data'>
             <span>
               <label>
-                Date:
+                Date*
               </label>
               <input
                 type="date"
@@ -264,7 +272,7 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
               />
             </span><span>
               <label>
-                Time:
+                Time*
               </label>
               <input
                 type="time"
@@ -273,13 +281,12 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
               />
             </span><span>
               <label>
-                Duration:
+                Duration*
               </label>
               <DurationPicker onChange={(duration) => handleInputChange('Duration', duration)} />
 
             </span>
           </div>
-          {/* Assuming Duration is in HH:mm format */}
           {formData.Date && formData.Time && formData.Duration && (
             <p className='subtitle'>
               This event is scheduled on {formData.Date} from {formData.Time} until{' '}
@@ -289,7 +296,7 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
 
           <span className="input-with-button">
             <label>
-              Location
+              Location*
             </label>
             <input
               type="text"
@@ -358,7 +365,7 @@ const NewEvent: React.FC<any> = ({ onCancel }) => {
                 </button>
                 <input
                   type="file"
-                  multiple  // Allow multiple files
+                  multiple  
                   hidden
                   ref={fileInputRef}
                   onChange={(e) => handleAttachmentInputChange(0, e.target.files)}

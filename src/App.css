@@ -438,9 +438,9 @@ label {
   border: 15px solid #04364A;
   padding: 20px;
   min-width: 300px;
-  min-height: 300px;
+  min-height: 315px;
   max-width: 300px;
-  max-height: 300px;
+  max-height: 315px;
   border-radius: 8px;
   display: flex;
   justify-content: space-between;

@@ -102,16 +102,7 @@ const ViewEvent: React.FC<Props> = ({ onCancel, eventDetails }) => {
             </span>
           </div>
           <div>
-            <label>Uploaded Attachments</label>
-            <div className='files_container'>
-              <div className="uploaded_files">
-                {eventDetails.Attachments.map((attachment, index) => (
-                  <div key={index}>
-                    <p>{attachment.filename}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+            
           </div>
         </form>
       </div>
