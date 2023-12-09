@@ -1,24 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-
+import Header from './Components/Header';
+import Events from './pages/Events';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      {/* <div className='toast'> */}
+
+      <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          hideProgressBar={false}
+          closeOnClick
+          pauseOnHover
+          draggable
+          style={{ top:0, left: '50%', transform: 'translateX(-50%)', position:'fixed' ,zIndex: 9999 }}
+        />
+      {/* </div> */}
+      <div className="main">
+        <Events />
+      </div>
     </div>
   );
 }
